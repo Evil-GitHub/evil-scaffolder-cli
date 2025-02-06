@@ -1,6 +1,6 @@
 {
   "name": "@poppy_evil/design-pro",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A cli to create awesome scaffolder.",
   "main": "index.js",
   "scripts": {
