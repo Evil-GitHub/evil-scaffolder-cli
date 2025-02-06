@@ -51,7 +51,9 @@ const canCreate = async (action, name) => {
 // 创建工程
 const doCreate = async (action, name) => {
   const repositoryUrl =
-    action === 1 ? "" : "https://github.com/Evil-GitHub/demo.git";
+    action === 1
+      ? ""
+      : "https://github.com/Evil-GitHub/react-typescript-starter.git";
   const targetDir = path.join(process.cwd(), name);
   const downloadSpinner = ora("Start downlading template project...");
   const renameSpinner = ora("Renaming project...");
