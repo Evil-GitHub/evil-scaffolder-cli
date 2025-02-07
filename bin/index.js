@@ -53,7 +53,7 @@ const doCreate = async (action, name) => {
   const repositoryUrl =
     action === 1
       ? ""
-      : "https://github.com/Evil-GitHub/react-typescript-starter.git#main";
+      : "https://github.com/Evil-GitHub/react-typescript-starter.git";
   const targetDir = path.join(process.cwd(), name);
   const downloadSpinner = ora("Start downlading template project...");
   const renameSpinner = ora("Renaming project...");

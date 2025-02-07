@@ -1,7 +1,7 @@
 {
   "name": "@poppy_evil/design-pro",
-  "version": "0.0.7",
-  "description": "A cli to create awesome scaffolder.",
+  "version": "0.0.8",
+  "description": "A cli to create awesome scaffolded.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
