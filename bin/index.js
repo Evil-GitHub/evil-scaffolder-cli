@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 import { Command } from "commander";
 import chalk from "chalk";
@@ -8,8 +8,16 @@ import degit from "degit";
 import fs from "fs-extra";
 import ora from "ora";
 import figlet from "figlet";
+import { fileURLToPath } from "url";
 
 const program = new Command();
+
+const packageJsonPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "package.json",
+);
+const packageJson = fs.readJsonSync(packageJsonPath);
 
 // 创建条件检查
 const canCreate = async (action, name) => {
@@ -97,7 +105,7 @@ program
   .description(
     "An awesome scaffloder width AntD, easily to use, supports JavaScript and TypeScript.",
   )
-  .version("0.0.1");
+  .version(packageJson.version);
 
 // 创建命令
 program
