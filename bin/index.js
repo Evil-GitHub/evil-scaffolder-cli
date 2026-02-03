@@ -16,7 +16,7 @@ const canCreate = async (action, name) => {
   // js 目前不支持，因为没有相应代码库
   if (action === 1) {
     console.log(
-      "Javascript scaffolder is not supported currently, please use Typescript instead!"
+      "Javascript scaffolder is not supported currently, please use Typescript instead!",
     );
     return false;
   }
@@ -36,7 +36,7 @@ const canCreate = async (action, name) => {
 
     if (action === -1) {
       console.log(
-        `design-pro create project(${chalk.blueBright(`${name}`)}) is canceled.`
+        `design-pro create project(${chalk.blueBright(`${name}`)}) is canceled.`,
       );
       return false;
     } else {
@@ -51,9 +51,7 @@ const canCreate = async (action, name) => {
 // 创建工程
 const doCreate = async (action, name) => {
   const repositoryUrl =
-    action === 1
-      ? ""
-      : "https://github.com/Evil-GitHub/react-typescript-starter.git";
+    action === 1 ? "" : "https://github.com/Evil-GitHub/evil-app.git";
   const targetDir = path.join(process.cwd(), name);
   const downloadSpinner = ora("Start downlading template project...");
   const renameSpinner = ora("Renaming project...");
@@ -75,16 +73,16 @@ const doCreate = async (action, name) => {
           function writeJSON(err) {
             if (err) {
               renameSpinner.fail(
-                `${chalk.red(`Rename project to ${name} failed.`)}`
+                `${chalk.red(`Rename project to ${name} failed.`)}`,
               );
               console.log("You can manually modify it in package.json latter.");
             } else {
               renameSpinner.succeed(
-                `${chalk.green(`Rename project to ${name} successfully.`)}`
+                `${chalk.green(`Rename project to ${name} successfully.`)}`,
               );
               console.log(`${chalk.green("Happy coding...")}`);
             }
-          }
+          },
         );
       }
     })
@@ -97,7 +95,7 @@ const doCreate = async (action, name) => {
 program
   .name("design-pro")
   .description(
-    "An awesome scaffloder width AntD, easily to use, supports JavaScript and TypeScript."
+    "An awesome scaffloder width AntD, easily to use, supports JavaScript and TypeScript.",
   )
   .version("0.0.1");
 
