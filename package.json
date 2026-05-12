@@ -1,6 +1,6 @@
 {
   "name": "@poppy_evil/design-pro",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A CLI to create an Ant Design project scaffold.",
   "main": "bin/index.js",
   "scripts": {
