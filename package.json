@@ -1,13 +1,16 @@
 {
   "name": "@poppy_evil/design-pro",
   "version": "2.0.0",
-  "description": "A cli to create awesome scaffolded.",
-  "main": "index.js",
+  "description": "A CLI to create an Ant Design project scaffold.",
+  "main": "bin/index.js",
   "scripts": {
-    "release:patch": "npm version patch && (test -n \"$npm_config_otp\" && npm publish --otp=$npm_config_otp || npm publish)",
-    "release:minor": "npm version minor && (test -n \"$npm_config_otp\" && npm publish --otp=$npm_config_otp || npm publish)",
-    "release:major": "npm version major && (test -n \"$npm_config_otp\" && npm publish --otp=$npm_config_otp || npm publish)",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "publish:patch": "node scripts/publish.js patch",
+    "publish:minor": "node scripts/publish.js minor",
+    "publish:major": "node scripts/publish.js major",
+    "release:patch": "npm run publish:patch",
+    "release:minor": "npm run publish:minor",
+    "release:major": "npm run publish:major",
+    "test": "node bin/index.js --help"
   },
   "keywords": [],
   "author": "Evil",
@@ -17,6 +20,11 @@
     "design-pro": "bin/index.js",
     "dp": "bin/index.js"
   },
+  "files": [
+    "bin",
+    "README.md",
+    "screenshots"
+  ],
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^11.1.0",

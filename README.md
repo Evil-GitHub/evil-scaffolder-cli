@@ -1,4 +1,4 @@
-# cli to create an awesome project using AntDesign.
+# CLI to create an Ant Design project scaffold.
 
 ## Usage
 
@@ -18,12 +18,12 @@ or
 
 ### choose language
 
-JS is not supported right now. Use Typescript instead.
+JavaScript is not supported right now. Use TypeScript instead.
 ![choose_language](/screenshots/choose_language.png)
 
 ### happy coding
 
-The downloading will start, just wait a few seconds.
+The CLI downloads the TypeScript template from `Evil-GitHub/evil-app`, renames the project in `package.json`, and then you are ready to code.
 ![happy_coding](/screenshots/happy_coding.png)
 
 ## Release / 发布
@@ -43,17 +43,35 @@ The downloading will start, just wait a few seconds.
 
 ### 发版
 
-- 补丁版本：`npm run release:patch`
-- 次版本：`npm run release:minor`
-- 主版本：`npm run release:major`
+自动发包脚本会依次执行：
+
+1. 检查 git 工作区是否干净
+2. 运行 `npm test`
+3. 运行 `npm pack --dry-run`
+4. 执行 `npm version ...`
+5. 执行 `npm publish`
+6. 执行 `git push --follow-tags`
+
+发补丁版本：
+
+`npm run publish:patch`
+
+发次版本：
+
+`npm run publish:minor`
+
+发主版本：
+
+`npm run publish:major`
 
 如果你的 npm 账号开启了发布 2FA（常见报错：需要 two-factor authentication / bypass 2fa token），需要提供一次性验证码（OTP）：
 
-- 一次性（不走脚本）：`npm publish --otp=123456`
-- 走脚本：`npm_config_otp=123456 npm run release:patch`（minor/major 同理）
+- `npm_config_otp=<your-otp-code> npm run publish:patch`
+- `npm_config_otp=<your-otp-code> npm run publish:minor`
+- `npm_config_otp=<your-otp-code> npm run publish:major`
 
-### 推送 tag
+旧命令仍可用：
 
-`npm version ...` 会在本地创建 git commit 与 tag。发布成功后需要推送到远端：
-
-`git push --follow-tags`
+- `npm run release:patch`
+- `npm run release:minor`
+- `npm run release:major`

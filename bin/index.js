@@ -24,7 +24,7 @@ const canCreate = async (action, name) => {
   // js 目前不支持，因为没有相应代码库
   if (action === 1) {
     console.log(
-      "Javascript scaffolder is not supported currently, please use Typescript instead!",
+      "JavaScript scaffolder is not supported currently, please use TypeScript instead!",
     );
     return false;
   }
@@ -36,7 +36,7 @@ const canCreate = async (action, name) => {
         type: "list",
         message: "Target directory already exists, pick an action:",
         choices: [
-          { name: "Overwrite", value: 1 },
+          { name: "Overwrite and delete existing directory", value: 1 },
           { name: "Cancel", value: -1 },
         ],
       },
@@ -61,49 +61,46 @@ const doCreate = async (action, name) => {
   const repositoryUrl =
     action === 1 ? "" : "https://github.com/Evil-GitHub/evil-app.git";
   const targetDir = path.join(process.cwd(), name);
-  const downloadSpinner = ora("Start downlading template project...");
+  const downloadSpinner = ora("Start downloading template project...");
   const renameSpinner = ora("Renaming project...");
-  downloadSpinner.start();
-  const emitter = degit(repositoryUrl);
-  await emitter
-    .clone(targetDir)
-    .then(() => {
-      downloadSpinner.succeed(`${chalk.green("Downloading succeed.")}`);
-      renameSpinner.start;
-      const fileName = targetDir + "/package.json";
-      if (fs.existsSync(fileName)) {
-        const file = fs.readFileSync(fileName);
-        let json = JSON.parse(file);
-        json.name = name;
-        fs.writeFile(
-          fileName,
-          JSON.stringify(json, null, 2),
-          function writeJSON(err) {
-            if (err) {
-              renameSpinner.fail(
-                `${chalk.red(`Rename project to ${name} failed.`)}`,
-              );
-              console.log("You can manually modify it in package.json latter.");
-            } else {
-              renameSpinner.succeed(
-                `${chalk.green(`Rename project to ${name} successfully.`)}`,
-              );
-              console.log(`${chalk.green("Happy coding...")}`);
-            }
-          },
-        );
-      }
-    })
-    .catch((e) => {
-      downloadSpinner.fail(`${chalk.red("Requst failed.")}`);
-      console.log(e);
-    });
+  let downloaded = false;
+
+  try {
+    downloadSpinner.start();
+    const emitter = degit(repositoryUrl);
+    await emitter.clone(targetDir);
+    downloaded = true;
+    downloadSpinner.succeed(`${chalk.green("Downloading succeeded.")}`);
+
+    const fileName = path.join(targetDir, "package.json");
+    if (await fs.pathExists(fileName)) {
+      renameSpinner.start();
+      const json = await fs.readJson(fileName);
+      json.name = name;
+      await fs.writeJson(fileName, json, { spaces: 2 });
+      renameSpinner.succeed(
+        `${chalk.green(`Rename project to ${name} successfully.`)}`,
+      );
+    }
+
+    console.log(`${chalk.green("Happy coding...")}`);
+  } catch (e) {
+    if (!downloaded) {
+      downloadSpinner.fail(`${chalk.red("Request failed.")}`);
+    }
+    if (downloaded && renameSpinner.isSpinning) {
+      renameSpinner.fail(`${chalk.red(`Rename project to ${name} failed.`)}`);
+      console.log("You can manually modify it in package.json later.");
+    }
+    console.log(e);
+    process.exitCode = 1;
+  }
 };
 
 program
   .name("design-pro")
   .description(
-    "An awesome scaffloder width AntD, easily to use, supports JavaScript and TypeScript.",
+    "An awesome scaffolder with AntD, easy to use, currently supports TypeScript.",
   )
   .version(packageJson.version);
 
@@ -112,27 +109,26 @@ program
   .command("create <name>")
   .alias("c")
   .description("Create an awesome project.")
-  .action((name) => {
-    figlet("design-pro").then(async (data) => {
-      console.log(chalk.blue(data));
+  .action(async (name) => {
+    const data = await figlet("design-pro");
+    console.log(chalk.blue(data));
 
-      const { action } = await inquirer.prompt([
-        {
-          name: "action",
-          type: "list",
-          message: "Which script language do you want?",
-          choices: [
-            { name: "JavaScript", value: 1 },
-            { name: "TypeScript", value: 2 },
-          ],
-        },
-      ]);
+    const { action } = await inquirer.prompt([
+      {
+        name: "action",
+        type: "list",
+        message: "Which script language do you want?",
+        choices: [
+          { name: "JavaScript", value: 1 },
+          { name: "TypeScript", value: 2 },
+        ],
+      },
+    ]);
 
-      const ok = await canCreate(action, name);
-      if (ok) {
-        doCreate(action, name);
-      }
-    });
+    const ok = await canCreate(action, name);
+    if (ok) {
+      await doCreate(action, name);
+    }
   });
 
 program.parse();
